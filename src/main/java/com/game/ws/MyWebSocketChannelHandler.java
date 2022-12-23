@@ -1,4 +1,4 @@
-package com.game.websocket;
+package com.game.ws;
 
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.socket.SocketChannel;

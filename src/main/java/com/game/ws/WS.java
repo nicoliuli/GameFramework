@@ -1,5 +1,6 @@
-package com.game.websocket;
+package com.game.ws;
 
+import com.game.core.config.ServerConfig;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
@@ -7,13 +8,9 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 
-/**
- * 程序的入口，负责启动应用
- * @author liuli
- *
- */
-public class Main {
-	public static void main(String[] args) {
+
+public class WS {
+	public void startup() {
 
 
 		EventLoopGroup bossGroup = new NioEventLoopGroup();
@@ -23,7 +20,7 @@ public class Main {
 			b.group(bossGroup, workGroup);
 			b.channel(NioServerSocketChannel.class);
 			b.childHandler(new MyWebSocketChannelHandler());
-			ChannelFuture channelFuture = b.bind(8888).sync();
+			ChannelFuture channelFuture = b.bind(ServerConfig.WS_PORT).sync();
 			Channel channel = channelFuture.channel();
 			channel.closeFuture().sync();
 
