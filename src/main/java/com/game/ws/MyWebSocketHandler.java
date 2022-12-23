@@ -27,10 +27,11 @@ public class MyWebSocketHandler extends SimpleChannelInboundHandler<TextWebSocke
         int portIndex = PortUtil.portIndex();
         Port port = Node.getNode().getPort(portIndex);
 
-
-        Connection conn = new Connection(HumanObjectUtil.genHumanId(), channel, port);
         // 创建会话
+        Integer humanId = HumanObjectUtil.genHumanId();
+        Connection conn = new Connection(humanId, channel, port);
 
+        port.addConn(conn);
     }
 
     @Override

@@ -18,4 +18,8 @@ public class Connection {
         this.channel = channel;
         this.port = port;
     }
+
+    public int getHumanId() {
+        return humanId;
+    }
 }
