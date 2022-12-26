@@ -42,6 +42,8 @@ public class MyWebSocketHandler extends SimpleChannelInboundHandler<TextWebSocke
         // 解码协议
 
         // 投入node队列
+        String message = textWebSocketFrame.text();
+        Node.getNode().addQueue(message);
     }
 
     @Override
