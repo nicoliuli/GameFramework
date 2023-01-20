@@ -14,7 +14,7 @@ public class Node extends Thread {
     private ConcurrentMap<Integer, Port> ports;
 
     // ws -> node
-    private LinkedBlockingQueue<String> queue;
+    private LinkedBlockingQueue<Call> queue;
 
 
     public Node(int nodeId) {
@@ -40,26 +40,29 @@ public class Node extends Thread {
         while (true) {
             while (!queue.isEmpty()) {
                 // 投入port队列
-                String message = queue.poll();
-                nodeMessageHandler(message);
+                Call call = queue.poll();
+                nodeMessageHandler(call);
             }
         }
     }
 
-    public void nodeMessageHandler(String message) {
-        Log.info("node message = ", message);
+    public void nodeMessageHandler(Call call) {
+        Log.info("node call = ", call);
         // 解码，分派port
-        Call call = JSON.parseObject(message, Call.class);
+
         if(ServerConfig.NODE_ID != call.getFromNodeId()){
             // 发到rpc队列
             return;
         }
-
-
+        // 投入port queue
+        Integer toPortId = call.getToPortId();
+        Port port = Node.instance().ports.get(toPortId);
+        call.setQueueType(2);
+        port.addQueue(call);
     }
 
 
-    public static Node getNode() {
+    public static Node instance() {
         return instance;
     }
 
@@ -67,8 +70,8 @@ public class Node extends Thread {
         return ports.get(portId);
     }
 
-    public void addQueue(String message) {
-        this.queue.add(message);
+    public void addQueue(Call call) {
+        this.queue.add(call);
     }
 
 }

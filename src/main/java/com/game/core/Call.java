@@ -8,15 +8,22 @@ public class Call {
     private Integer toNodeId;
     private Integer toPortId;
 
+    private Integer portId;
+
     /**
-     * ws->node
-     * node->port
-     * port->service
+     * ws->node 1
+     * node->port   2
+     * port->service    3
      *
      */
     private Integer queueType;
 
+    // msgHandlerId
+    private String msgHandlerId;
+
     private Object [] params;
+
+    private Integer humanId;
 
     // 方法引用
 
@@ -69,5 +76,29 @@ public class Call {
 
     public void setParams(Object[] params) {
         this.params = params;
+    }
+
+    public Integer getPortId() {
+        return portId;
+    }
+
+    public void setPortId(Integer portId) {
+        this.portId = portId;
+    }
+
+    public Integer getHumanId() {
+        return humanId;
+    }
+
+    public void setHumanId(Integer humanId) {
+        this.humanId = humanId;
+    }
+
+    public String getMsgHandlerId() {
+        return msgHandlerId;
+    }
+
+    public void setMsgHandlerId(String msgHandlerId) {
+        this.msgHandlerId = msgHandlerId;
     }
 }

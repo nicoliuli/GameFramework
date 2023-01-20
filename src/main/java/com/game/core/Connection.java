@@ -6,12 +6,11 @@ public class Connection {
 
     private int humanId;
 
-    private Channel channel;
+    private final Channel channel;
 
-    private Port port;
+    private final Port port;
 
-    public Connection() {
-    }
+
 
     public Connection(int humanId, Channel channel, Port port) {
         this.humanId = humanId;
@@ -22,4 +21,14 @@ public class Connection {
     public int getHumanId() {
         return humanId;
     }
+
+    public Channel getChannel() {
+        return channel;
+    }
+
+    public Port getPort() {
+        return port;
+    }
+
+
 }

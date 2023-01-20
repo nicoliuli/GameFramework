@@ -1,8 +1,10 @@
 package com.game.ws;
 
+import com.game.core.Call;
 import com.game.core.Connection;
 import com.game.core.Node;
 import com.game.core.Port;
+import com.game.core.config.ServerConfig;
 import com.game.core.util.HumanObjectUtil;
 import com.game.core.util.PortUtil;
 import io.netty.channel.Channel;
@@ -18,17 +20,19 @@ public class MyWebSocketHandler extends SimpleChannelInboundHandler<TextWebSocke
 
     public static ChannelGroup group = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
 
+    private Integer humanId;
+    private Integer portId;
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         // 创建链接
         Channel channel = ctx.channel();
 
         // 分派port
-        int portIndex = PortUtil.portIndex();
-        Port port = Node.getNode().getPort(portIndex);
+        portId = PortUtil.portIndex();
+        Port port = Node.instance().getPort(portId);
 
         // 创建会话
-        Integer humanId = HumanObjectUtil.genHumanId();
+        humanId = HumanObjectUtil.genHumanId();
         Connection conn = new Connection(humanId, channel, port);
 
         port.addConn(conn);
@@ -36,14 +40,17 @@ public class MyWebSocketHandler extends SimpleChannelInboundHandler<TextWebSocke
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, TextWebSocketFrame textWebSocketFrame) throws Exception {
-		/*System.out.println("收到的消息："+textWebSocketFrame.text());
-		ctx.channel().writeAndFlush(new TextWebSocketFrame(LocalDateTime.now()+" : " + textWebSocketFrame.text()));*/
-
-        // 解码协议
-
-        // 投入node队列
+        Call call = new Call();
+        call.setFromNodeId(ServerConfig.NODE_ID);
+        call.setFromPortId(portId);
+        call.setToPortId(portId);
+        call.setHumanId(humanId);
+        call.setQueueType(1);
+        // 解析并设置 param function等
         String message = textWebSocketFrame.text();
-        Node.getNode().addQueue(message);
+        call.setMsgHandlerId(message);
+        // 投入node队列
+        Node.instance().addQueue(call);
     }
 
     @Override
