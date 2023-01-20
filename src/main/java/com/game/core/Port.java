@@ -1,9 +1,12 @@
 package com.game.core;
 
 import com.game.core.util.Log;
+import com.game.service.AccountService;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -11,7 +14,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 public class Port extends Thread {
     private int portId;
     private Node node;
-    private List<Service> services;
+    public Map<String,Service> services;
     private MsgHandlerDispatcher msgDispatcher;
 
     // node -> port
@@ -22,14 +25,27 @@ public class Port extends Thread {
     public Port(int portId) {
         this.portId = portId;
         this.queue = new LinkedBlockingQueue();
-        this.services = new ArrayList<>();
+        this.services = new HashMap();
         this.conns = new ConcurrentHashMap();
         this.msgDispatcher = new MsgHandlerDispatcher();
+
+    }
+
+    private void startService(){
+        for (Map.Entry<String, Service> entry : services.entrySet()) {
+            String serviceId = entry.getKey();
+            Service service = entry.getValue();
+            service.start();
+        }
     }
 
     @Override
     public void run() {
         Log.info("port start,portId = ", portId);
+        // 启动service
+        startService();
+
+        // 启动MsgHandlerDispatcher
         msgDispatcher.start();
         loop();
     }
