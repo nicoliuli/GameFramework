@@ -4,6 +4,7 @@ import com.game.core.Connection;
 import com.game.core.HumanObject;
 import com.game.core.MsgParam;
 import com.game.core.Port;
+import com.game.core.dto.User;
 import io.netty.channel.Channel;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 
@@ -20,7 +21,9 @@ public class AccountMsgHandler {
         Port port = connection.getPort();
         Channel channel = connection.getChannel();
 
-        String result = "verify return portId = " + port.getPortId() +", humanId = " + humanId;
+        User user = (User) msgParam.getParam();
+
+        String result = "verify return portId = " + port.getPortId() +", humanId = " + humanId + ",param = " + user;
         channel.writeAndFlush(new TextWebSocketFrame(result));
 
     }

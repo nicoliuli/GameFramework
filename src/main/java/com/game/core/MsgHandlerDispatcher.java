@@ -1,17 +1,17 @@
 package com.game.core;
 
 
-
+import com.alibaba.fastjson.JSON;
 import com.game.core.func.Func1;
 
 import java.util.concurrent.LinkedBlockingQueue;
 
-public class MsgHandlerDispatcher extends Thread{
+public class MsgHandlerDispatcher extends Thread {
     private LinkedBlockingQueue<MsgCall> queue;
 
     private MsgHandlerMapping handlerMapping;
 
-    public MsgHandlerDispatcher(){
+    public MsgHandlerDispatcher() {
         this.queue = new LinkedBlockingQueue<>();
         handlerMapping = new MsgHandlerMapping();
     }
@@ -33,23 +33,24 @@ public class MsgHandlerDispatcher extends Thread{
         }
     }
 
-    public void callMsgHandler(MsgCall msgCall){
+    public void callMsgHandler(MsgCall msgCall) {
         Call call = msgCall.getCall();
         HumanObject humanObj = msgCall.getHumanObj();
         String msgHandlerId = call.getMsgHandlerId();
-        Func1 msgHander = handlerMapping.getMsgHander(msgHandlerId);
+        MsgParamWrapper msgParamWrapper = handlerMapping.getMsgParamWrapper(msgHandlerId);
+
+        Func1<MsgParam> func1 = msgParamWrapper.getFunc1();
+        Class clazz = msgParamWrapper.getClazz();
 
         MsgParam msgParam = new MsgParam();
-        msgParam.setParam("Hello world");
+        msgParam.setParam(JSON.parseObject(call.getJsonParam(), clazz));
         msgParam.setHumanObject(humanObj);
-        msgHander.apply(msgParam);
+        func1.apply(msgParam);
     }
 
     public void addQueue(MsgCall call) {
         this.queue.add(call);
     }
-
-
 
 
 }

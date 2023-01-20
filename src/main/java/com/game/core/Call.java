@@ -21,7 +21,7 @@ public class Call {
     // msgHandlerId
     private String msgHandlerId;
 
-    private Object [] params;
+    private String jsonParam;
 
     private Integer humanId;
 
@@ -70,12 +70,12 @@ public class Call {
         this.queueType = queueType;
     }
 
-    public Object[] getParams() {
-        return params;
+    public String getJsonParam() {
+        return jsonParam;
     }
 
-    public void setParams(Object[] params) {
-        this.params = params;
+    public void setJsonParam(String jsonParam) {
+        this.jsonParam = jsonParam;
     }
 
     public Integer getPortId() {

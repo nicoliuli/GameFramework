@@ -2,13 +2,13 @@ package com.game.core;
 
 public class MsgParam {
     private HumanObject humanObject;
-    private String param;
+    private Object param;
 
-    public String getParam() {
+    public Object getParam() {
         return param;
     }
 
-    public void setParam(String param) {
+    public void setParam(Object param) {
         this.param = param;
     }
 

@@ -1,5 +1,7 @@
 package com.game.ws;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.game.core.Call;
 import com.game.core.Connection;
 import com.game.core.Node;
@@ -48,7 +50,11 @@ public class MyWebSocketHandler extends SimpleChannelInboundHandler<TextWebSocke
         call.setQueueType(1);
         // 解析并设置 param function等
         String message = textWebSocketFrame.text();
-        call.setMsgHandlerId(message);
+        JSONObject jsonObject = JSONObject.parseObject(message);
+        String msgHandlerId = jsonObject.getString("msgHandlerId");
+        JSONObject jsonParam = jsonObject.getJSONObject("jsonParam");
+        call.setMsgHandlerId(msgHandlerId);
+        call.setJsonParam(jsonParam.toJSONString());
         // 投入node队列
         Node.instance().addQueue(call);
     }
