@@ -1,4 +1,5 @@
 package com.game.core;
+import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 
 public class HumanObject {
     private Integer humanId;
@@ -18,5 +19,9 @@ public class HumanObject {
 
     public void setConnection(Connection connection) {
         this.connection = connection;
+    }
+
+    public void sendMsg(String msg){
+        this.connection.getChannel().writeAndFlush(new TextWebSocketFrame(msg));
     }
 }
