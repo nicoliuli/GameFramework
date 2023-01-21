@@ -2,6 +2,7 @@ package com.game.service;
 
 import com.game.core.Port;
 import com.game.core.Service;
+import com.game.core.anno.Serv;
 import com.game.core.constant.ServiceConstant;
 import com.game.core.func.Func2;
 import com.game.core.func.Func3;
@@ -21,21 +22,22 @@ public class AccountService extends Service {
         regMethod();
     }
 
+    @Serv
     public void verify(String name, Integer age) {
-
+        System.out.println("service call name = "+name+",age = "+age);
     }
 
+    @Serv
     public void equip(Integer id, Integer position, String name) {
 
     }
 
     @Override
     public void regMethod() {
-     //   AccountService accountService = (AccountService) service;
         Func2<String, Integer> verify = this::verify;
-        methodMapping.put("AccountService.verify", verify);
+        methodMapping.put(ServiceConstant.ACCOUNTSERVICE_VERIFY, verify);
         Func3<Integer, Integer, String> equip = this::equip;
-        methodMapping.put("AccountService.equip", equip);
+        methodMapping.put(ServiceConstant.ACCOUNTSERVICE_EQUIP, equip);
     }
 
     @Override

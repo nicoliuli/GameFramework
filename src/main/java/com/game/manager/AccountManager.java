@@ -15,4 +15,6 @@ public class AccountManager {
         String result = "verify return portId = " + portId +", humanId = " + humanId + ",param = " + user;
         humanObj.sendMsg(result);
     }
+
+
 }

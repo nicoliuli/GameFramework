@@ -2,6 +2,7 @@ package com.game.service.proxy;
 
 import com.game.core.Port;
 import com.game.core.Service;
+import com.game.core.ServiceCall;
 import com.game.core.constant.ServiceConstant;
 
 public class AccountServiceProxy {
@@ -16,8 +17,11 @@ public class AccountServiceProxy {
 
     public void verify(String name,Integer age){
         Service service = port.services.get(serciceId);
-        //封装参数 投入service队列
-        service.addQueue(name);
-
+        ServiceCall call = new ServiceCall();
+        call.setPortId(port.getPortId());
+        call.setServiceId(serciceId);
+        call.setMethodKey(ServiceConstant.ACCOUNTSERVICE_VERIFY);
+        call.setField(service.parseField(name,age));
+        service.addQueue(call);
     }
 }

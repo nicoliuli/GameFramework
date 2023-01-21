@@ -15,18 +15,16 @@ public abstract class Service extends Thread {
 
     public Port port;
 
-    //
+    // service方法映射
     public Map<String, Object> methodMapping;
 
     // port -> service
-    public LinkedBlockingQueue<String> queue;
-
-
+    public LinkedBlockingQueue<ServiceCall> queue;
 
 
     @Override
     public void run() {
-        Log.info("portId = ",port.getPortId(),",serviceId = ",serviceId," start!");
+        Log.info("portId = ", port.getPortId(), ",serviceId = ", serviceId, " start!");
         loop();
     }
 
@@ -34,28 +32,30 @@ public abstract class Service extends Thread {
     private void loop() {
         while (true) {
             while (!queue.isEmpty()) {
-                String poll = queue.poll();
-                System.out.println("service 收到消息 "+ poll);
-             //   processService("");
+                ServiceCall call = queue.poll();
+                processService(call);
             }
         }
     }
 
-    private void processService(String methodKey) {
-        int size = 2;
+    private void processService(ServiceCall call) {
+        String methodKey = call.getMethodKey();
+        Object[] field = call.getField();
+        int size = field == null ? 0 : field.length;
         Object obj = methodMapping.get(methodKey);
+
         if (size == 0) {
             Func0 func0 = (Func0) obj;
             func0.apply();
         } else if (size == 1) {
             Func1 func1 = (Func1) obj;
-            func1.apply("");
+            func1.apply(field[0]);
         } else if (size == 2) {
             Func2 func2 = (Func2) obj;
-            func2.apply("", new Object());
+            func2.apply(field[0], field[1]);
         } else if (size == 3) {
             Func3 func3 = (Func3) obj;
-            func3.apply("", new Object(), new Date());
+            func3.apply(field[0], field[1], field[2]);
         }
     }
 
@@ -63,7 +63,11 @@ public abstract class Service extends Thread {
 
     abstract public String getServiceId();
 
-    public void addQueue(String msg){
-        queue.add(msg);
+    public void addQueue(ServiceCall call) {
+        queue.add(call);
+    }
+
+    public Object [] parseField(Object ... params){
+        return params;
     }
 }
