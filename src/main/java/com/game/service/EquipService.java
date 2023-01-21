@@ -8,11 +8,11 @@ import com.game.core.func.Func3;
 import java.util.HashMap;
 import java.util.concurrent.LinkedBlockingQueue;
 
-public class AccountService extends Service {
+public class EquipService extends Service {
 
 
-    public AccountService(Port port){
-        this.serviceId = "AccountService";
+    public EquipService(Port port){
+        this.serviceId = "EquipService";
         this.port = port;
         methodMapping  = new HashMap<>();
         queue = new LinkedBlockingQueue();
@@ -20,21 +20,17 @@ public class AccountService extends Service {
         regMethod();
     }
 
-    public void verify(String name, Integer age) {
+    public void wear(String name, Integer age) {
 
     }
 
-    public void equip(Integer id, Integer position, String name) {
 
-    }
 
     @Override
     public void regMethod() {
-     //   AccountService accountService = (AccountService) service;
-        Func2<String, Integer> verify = this::verify;
-        methodMapping.put("AccountService.verify", verify);
-        Func3<Integer, Integer, String> equip = this::equip;
-        methodMapping.put("AccountService.equip", equip);
+    //    EquipService equipService = (EquipService) service;
+        Func2<String, Integer> wear = this::wear;
+        methodMapping.put("EquipService.wear", wear);
     }
 
     @Override

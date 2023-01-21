@@ -7,7 +7,6 @@ import com.game.core.func.Func3;
 import com.game.core.util.Log;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -16,18 +15,18 @@ public abstract class Service extends Thread {
 
     public Port port;
 
-    public Map<String, Object> map = new HashMap<>();
+    //
+    public Map<String, Object> methodMapping;
 
     // port -> service
-    private LinkedBlockingQueue queue;
+    public LinkedBlockingQueue queue;
 
-    public Service() {
-    }
+
 
 
     @Override
     public void run() {
-        Log.info("serviceId = {} start",serviceId);
+        Log.info("portId = ",port.getPortId(),",serviceId = ",serviceId," start!");
         loop();
     }
 
@@ -42,7 +41,7 @@ public abstract class Service extends Thread {
 
     private void processService(String methodKey) {
         int size = 2;
-        Object obj = map.get(methodKey);
+        Object obj = methodMapping.get(methodKey);
         if (size == 0) {
             Func0 func0 = (Func0) obj;
             func0.apply();

@@ -14,6 +14,9 @@ public class Log {
     }
 
     public static void info(String info, Object param1, Object param2, Object param3) {
-        System.out.println(info + param1 + param2 + param2);
+        System.out.println(info + param1 + param2 + param3);
+    }
+    public static void info(String info, Object param1, Object param2, Object param3,Object param4) {
+        System.out.println(info + param1 + param2 + param3 + param4);
     }
 }

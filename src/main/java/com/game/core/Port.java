@@ -1,11 +1,11 @@
 package com.game.core;
 
+import com.game.core.dto.Equip;
 import com.game.core.util.Log;
 import com.game.service.AccountService;
+import com.game.service.EquipService;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -31,11 +31,12 @@ public class Port extends Thread {
 
     }
 
-    private void startService(){
+    private void regAndStartService(){
+        AccountService accountService = new AccountService(this);
+        EquipService equipService = new EquipService(this);
+
         for (Map.Entry<String, Service> entry : services.entrySet()) {
-            String serviceId = entry.getKey();
-            Service service = entry.getValue();
-            service.start();
+            entry.getValue().start();
         }
     }
 
@@ -43,7 +44,7 @@ public class Port extends Thread {
     public void run() {
         Log.info("port start,portId = ", portId);
         // 启动service
-        startService();
+        regAndStartService();
 
         // 启动MsgHandlerDispatcher
         msgDispatcher.start();
