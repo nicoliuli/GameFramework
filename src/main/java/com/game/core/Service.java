@@ -31,9 +31,11 @@ public abstract class Service extends Thread {
 
     private void loop() {
         while (true) {
-            while (!queue.isEmpty()) {
-                ServiceCall call = queue.poll();
+            try{
+                ServiceCall call = queue.take();
                 processService(call);
+            }catch (Exception e){
+                e.printStackTrace();
             }
         }
     }

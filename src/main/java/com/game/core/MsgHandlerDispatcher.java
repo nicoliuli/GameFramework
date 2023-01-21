@@ -25,10 +25,12 @@ public class MsgHandlerDispatcher extends Thread {
 
     public void loop() {
         while (true) {
-            while (!queue.isEmpty()) {
-                // 找到对应的function
-                MsgCall msgCall = queue.poll();
+            // 找到对应的function
+            try{
+                MsgCall msgCall = queue.take();
                 callMsgHandler(msgCall);
+            }catch (Exception e){
+                e.printStackTrace();
             }
         }
     }

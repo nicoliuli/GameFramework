@@ -38,10 +38,12 @@ public class Node extends Thread {
     private void loop() {
         // 监听队列
         while (true) {
-            while (!queue.isEmpty()) {
+            try{
                 // 投入port队列
-                Call call = queue.poll();
+                Call call = queue.take();
                 nodeMessageHandler(call);
+            }catch (Exception e){
+                e.printStackTrace();
             }
         }
     }

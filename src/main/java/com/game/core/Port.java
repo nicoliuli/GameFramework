@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
 
 public class Port extends Thread {
@@ -51,14 +52,16 @@ public class Port extends Thread {
         loop();
     }
 
-    public void loop() {
+    public void loop()  {
         while (true) {
-            while (!queue.isEmpty()) {
+            try {
                 // 找到对应的MsgHandler
-                Call call = queue.poll();
+                Call call = queue.take();
                 portMessageHandler(call);
+            }catch (Exception e){
+                e.printStackTrace();
             }
-        }
+       }
     }
 
     public void portMessageHandler(Call call) {

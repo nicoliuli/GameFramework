@@ -24,7 +24,7 @@ public class AccountService extends Service {
 
     @Serv
     public void verify(String name, Integer age) {
-        System.out.println("service call name = "+name+",age = "+age);
+        System.out.println("service call name = "+name+",age = "+age+",thread = " + Thread.currentThread().getId());
     }
 
     @Serv
