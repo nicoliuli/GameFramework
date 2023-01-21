@@ -19,7 +19,7 @@ public abstract class Service extends Thread {
     public Map<String, Object> methodMapping;
 
     // port -> service
-    public LinkedBlockingQueue queue;
+    public LinkedBlockingQueue<String> queue;
 
 
 
@@ -34,7 +34,9 @@ public abstract class Service extends Thread {
     private void loop() {
         while (true) {
             while (!queue.isEmpty()) {
-                processService("");
+                String poll = queue.poll();
+                System.out.println("service 收到消息 "+ poll);
+             //   processService("");
             }
         }
     }
@@ -60,4 +62,8 @@ public abstract class Service extends Thread {
     abstract public void regMethod();
 
     abstract public String getServiceId();
+
+    public void addQueue(String msg){
+        queue.add(msg);
+    }
 }

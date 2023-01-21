@@ -2,6 +2,7 @@ package com.game.service;
 
 import com.game.core.Port;
 import com.game.core.Service;
+import com.game.core.constant.ServiceConstant;
 import com.game.core.func.Func2;
 import com.game.core.func.Func3;
 
@@ -12,7 +13,7 @@ public class EquipService extends Service {
 
 
     public EquipService(Port port){
-        this.serviceId = "EquipService";
+        this.serviceId = ServiceConstant.EQUIP_SERVICE_ID;
         this.port = port;
         methodMapping  = new HashMap<>();
         queue = new LinkedBlockingQueue();
