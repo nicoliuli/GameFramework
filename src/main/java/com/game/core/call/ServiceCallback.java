@@ -5,7 +5,7 @@ import com.game.core.util.Param;
 /**
  * 封装回调结果
  */
-public class ServiceCallback {
+public class ServiceCallback implements SCall{
 
     private Integer portId;
 
@@ -54,6 +54,11 @@ public class ServiceCallback {
         this.callbackType = callbackType;
         this.methodKey = methodKey;
         this.context = context;
+    }
+
+    @Override
+    public Integer getType() {
+        return 2;
     }
 
     public Integer getPortId() {

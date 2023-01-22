@@ -1,13 +1,17 @@
 package com.game.core;
 
+import com.game.core.call.SCall;
 import com.game.core.call.ServiceCall;
 import com.game.core.call.ServiceCallback;
+import com.game.core.constant.ServiceConstant;
 import com.game.core.func.Func0;
 import com.game.core.func.Func1;
 import com.game.core.func.Func2;
 import com.game.core.func.Func3;
 import com.game.core.util.Log;
+import com.game.core.util.Param;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -22,11 +26,20 @@ public abstract class Service extends Thread {
     public Map<String, Object> callbackMethodMapping;
 
     // port -> service
-    public LinkedBlockingQueue<ServiceCall> queue;
+    public LinkedBlockingQueue<SCall> queue;
 
-    // service的回调队列,消费后直接调用对应service的callback
-    public LinkedBlockingQueue<ServiceCallback> callBackQueue;
 
+
+
+    public Service(String serviceId,Port port){
+        this.serviceId = serviceId;
+        this.port = port;
+        this.methodMapping  = new HashMap<>();
+        this.callbackMethodMapping = new HashMap<>();
+        queue = new LinkedBlockingQueue<>();
+        this.port.services.put(getServiceId(),this);
+        regMethod();
+    }
 
     @Override
     public void run() {
@@ -38,14 +51,21 @@ public abstract class Service extends Thread {
     private void loop() {
         while (true) {
             try{
-                ServiceCall call = queue.take();
-                processService(call);
+                SCall call = queue.take();
+                Integer type = call.getType();
+                if(type == 1){
+                    processService((ServiceCall) call);
+                }else {
+                    processServiceCallBack((ServiceCallback) call);
+                }
+
             }catch (Exception e){
                 e.printStackTrace();
             }
         }
     }
 
+    // service队列
     private void processService(ServiceCall call) {
         String methodKey = call.getMethodKey();
         Object[] field = call.getField();
@@ -67,6 +87,17 @@ public abstract class Service extends Thread {
         }
     }
 
+    // service 回调队列
+    private void processServiceCallBack(ServiceCallback call) {
+        String methodKey = call.getMethodKey();
+
+        Func2 func2 = (Func2)callbackMethodMapping.get(methodKey);
+        Object result = call.getResult();
+        Param context = call.getContext();
+        func2.apply(result,context);
+
+    }
+
     abstract public void regMethod();
 
     abstract public String getServiceId();
@@ -76,7 +107,7 @@ public abstract class Service extends Thread {
     }
 
     public void addCallBackQueue(ServiceCallback call) {
-        callBackQueue.add(call);
+        queue.add(call);
     }
 
     public Object [] parseField(Object ... params){

@@ -2,9 +2,11 @@ package com.game.service;
 
 import com.game.core.Port;
 import com.game.core.Service;
+import com.game.core.call.ServiceCallback;
 import com.game.core.constant.ServiceConstant;
 import com.game.core.func.Func2;
 import com.game.core.func.Func3;
+import com.game.core.util.Param;
 
 import java.util.HashMap;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -13,15 +15,15 @@ public class EquipService extends Service {
 
 
     public EquipService(Port port){
-        this.serviceId = ServiceConstant.EQUIP_SERVICE_ID;
-        this.port = port;
-        methodMapping  = new HashMap<>();
-        queue = new LinkedBlockingQueue();
-        port.services.put(getServiceId(),this);
-        regMethod();
+        super(ServiceConstant.EQUIP_SERVICE_ID,port);
     }
 
-    public void wear(String name, Integer age) {
+    public void wear(String name, Integer age,ServiceCallback context) {
+        System.out.println(name + ":" + age);
+        if(context != null){
+            context.setResult("equip result");
+            port.ret(context);
+        }
 
     }
 
@@ -29,9 +31,8 @@ public class EquipService extends Service {
 
     @Override
     public void regMethod() {
-    //    EquipService equipService = (EquipService) service;
-        Func2<String, Integer> wear = this::wear;
-        methodMapping.put("EquipService.wear", wear);
+        Func3<String, Integer,ServiceCallback> wear = this::wear;
+        methodMapping.put(ServiceConstant.EEQUIPSERVICE_WEAR, wear);
     }
 
     @Override
