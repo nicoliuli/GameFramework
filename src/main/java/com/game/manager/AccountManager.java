@@ -5,7 +5,12 @@ import com.game.core.HumanObject;
 import com.game.core.dto.User;
 import com.game.service.proxy.AccountServiceProxy;
 
-public class AccountManager {
+public class AccountManager extends ManagerBase{
+
+    public static AccountManager inst(){
+        return inst(AccountManager.class);
+    }
+
     public void verify(HumanObject humanObj, User user) {
         Integer humanId = humanObj.getHumanId();
         Connection conn = humanObj.getConnection();
@@ -17,7 +22,7 @@ public class AccountManager {
         humanObj.sendMsg(result);
     }
 
-    public void _result(Object result,Object ... context) {
+    public void _verify_result(Object result,Object ... context) {
 
     }
 

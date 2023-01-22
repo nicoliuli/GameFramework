@@ -2,7 +2,7 @@ package com.game.service.proxy;
 
 import com.game.core.Port;
 import com.game.core.Service;
-import com.game.core.ServiceCall;
+import com.game.core.call.ServiceCall;
 import com.game.core.constant.ServiceConstant;
 
 public class AccountServiceProxy {

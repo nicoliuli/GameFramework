@@ -17,12 +17,7 @@ public class AccountMsgHandler {
 
         User user = (User) msgParam.getParam();
 
-      //  String result = "verify return portId = " + port.getPortId() +", humanId = " + humanId + ",param = " + user;
-      //  channel.writeAndFlush(new TextWebSocketFrame(result));
-
-        new AccountManager().verify(humanObject,user);
-
-
+        AccountManager.inst().verify(humanObject,user);
 
     }
 }

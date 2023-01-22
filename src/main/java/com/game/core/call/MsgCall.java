@@ -1,4 +1,7 @@
-package com.game.core;
+package com.game.core.call;
+
+import com.game.core.Call;
+import com.game.core.HumanObject;
 
 public class MsgCall {
     private Call call;

@@ -2,6 +2,7 @@ package com.game.core;
 
 
 import com.alibaba.fastjson.JSON;
+import com.game.core.call.MsgCall;
 import com.game.core.func.Func1;
 
 import java.util.concurrent.LinkedBlockingQueue;

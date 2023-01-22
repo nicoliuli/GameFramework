@@ -1,5 +1,6 @@
 package com.game.core;
 
+import com.game.core.constant.MsgHandlerConstant;
 import com.game.core.dto.User;
 import com.game.handler.AccountMsgHandler;
 
@@ -8,16 +9,25 @@ import java.util.Map;
 
 public class MsgHandlerMapping {
 
-    private Map<String,MsgParamWrapper> map = new HashMap();
+    /**
+     * port 到 msgHandler的映射
+     */
+    private Map<String, MsgParamWrapper> msgHandlerMap = new HashMap();
 
-    public void reg(){
+    /**
+     * service的回调队列
+     */
+    private Map<String, Object> callbackMap = new HashMap<>();
+
+    public void reg() {
         AccountMsgHandler accountMsgHandler = new AccountMsgHandler();
-        map.put("AccountMsgHandler.login",new MsgParamWrapper(accountMsgHandler::login,Object.class));
-        map.put("AccountMsgHandler.verify",new MsgParamWrapper(accountMsgHandler::verify,User.class));
+        msgHandlerMap.put(MsgHandlerConstant.ACCOUNTMANAGER_VERIFY, new MsgParamWrapper(accountMsgHandler::login, Object.class));
+        msgHandlerMap.put(MsgHandlerConstant.ACCOUNTMANAGER_EQUIP, new MsgParamWrapper(accountMsgHandler::verify, User.class));
+
     }
 
-    public MsgParamWrapper getMsgParamWrapper(String msgHandlerId){
-        return map.get(msgHandlerId);
+    public MsgParamWrapper getMsgParamWrapper(String msgHandlerId) {
+        return msgHandlerMap.get(msgHandlerId);
     }
 
 }
