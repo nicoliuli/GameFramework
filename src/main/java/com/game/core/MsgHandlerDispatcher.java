@@ -2,12 +2,14 @@ package com.game.core;
 
 
 import com.alibaba.fastjson.JSON;
+import com.game.core.call.WSCall;
 import com.game.core.call.MsgCall;
 import com.game.core.func.Func1;
 
 import java.util.concurrent.LinkedBlockingQueue;
 
 /**
+ * manager的方法分发器
  * 单实例
  */
 public class MsgHandlerDispatcher extends Thread {
@@ -51,16 +53,16 @@ public class MsgHandlerDispatcher extends Thread {
     }
 
     public void callMsgHandler(MsgCall msgCall) {
-        Call call = msgCall.getCall();
+        WSCall WSCall = msgCall.getWSCall();
         HumanObject humanObj = msgCall.getHumanObj();
-        String msgHandlerId = call.getMsgHandlerId();
+        String msgHandlerId = WSCall.getMsgHandlerId();
         MsgParamWrapper msgParamWrapper = handlerMapping.getMsgParamWrapper(msgHandlerId);
 
         Func1<MsgParam> func1 = msgParamWrapper.getFunc1();
         Class clazz = msgParamWrapper.getClazz();
 
         MsgParam msgParam = new MsgParam();
-        msgParam.setParam(JSON.parseObject(call.getJsonParam(), clazz));
+        msgParam.setParam(JSON.parseObject(WSCall.getJsonParam(), clazz));
         msgParam.setHumanObject(humanObj);
         func1.apply(msgParam);
     }

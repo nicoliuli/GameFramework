@@ -1,8 +1,7 @@
 package com.game.ws;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.game.core.Call;
+import com.game.core.call.WSCall;
 import com.game.core.Connection;
 import com.game.core.Node;
 import com.game.core.Port;
@@ -20,10 +19,10 @@ import io.netty.util.concurrent.GlobalEventExecutor;
 
 public class MyWebSocketHandler extends SimpleChannelInboundHandler<TextWebSocketFrame> {
 
-    public static ChannelGroup group = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
-
     private Integer humanId;
     private Integer portId;
+    private Connection conn;
+    private Port port;
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         // 创建链接
@@ -31,32 +30,31 @@ public class MyWebSocketHandler extends SimpleChannelInboundHandler<TextWebSocke
 
         // 分派port
         portId = PortUtil.portIndex();
-        Port port = Node.instance().getPort(portId);
+        port = Node.instance().getPort(portId);
 
         // 创建会话
         humanId = HumanObjectUtil.genHumanId();
-        Connection conn = new Connection(humanId, channel, port);
+        conn = new Connection(humanId, channel, port);
 
         port.addConn(conn);
     }
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, TextWebSocketFrame textWebSocketFrame) throws Exception {
-        Call call = new Call();
-        call.setFromNodeId(ServerConfig.NODE_ID);
-        call.setFromPortId(portId);
-        call.setToPortId(portId);
-        call.setHumanId(humanId);
-        call.setQueueType(1);
+        WSCall WSCall = new WSCall();
+        WSCall.setFromNodeId(ServerConfig.NODE_ID);
+        WSCall.setFromPortId(portId);
+        WSCall.setToPortId(portId);
+        WSCall.setHumanId(humanId);
         // 解析并设置 param function等
         String message = textWebSocketFrame.text();
         JSONObject jsonObject = JSONObject.parseObject(message);
         String msgHandlerId = jsonObject.getString("msgHandlerId");
         JSONObject jsonParam = jsonObject.getJSONObject("jsonParam");
-        call.setMsgHandlerId(msgHandlerId);
-        call.setJsonParam(jsonParam.toJSONString());
+        WSCall.setMsgHandlerId(msgHandlerId);
+        WSCall.setJsonParam(jsonParam.toJSONString());
         // 投入node队列
-        Node.instance().addQueue(call);
+        Node.instance().addQueue(WSCall);
     }
 
     @Override
@@ -69,5 +67,6 @@ public class MyWebSocketHandler extends SimpleChannelInboundHandler<TextWebSocke
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
         super.channelInactive(ctx);
         // 定时任务 移除数据
+        port.removeConn(humanId);
     }
 }

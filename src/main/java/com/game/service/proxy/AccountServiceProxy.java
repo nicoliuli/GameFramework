@@ -5,6 +5,7 @@ import com.game.core.Service;
 import com.game.core.call.ServiceCall;
 import com.game.core.call.ServiceCallback;
 import com.game.core.constant.ServiceConstant;
+import com.game.core.util.Param;
 
 public class AccountServiceProxy {
     private String serciceId = ServiceConstant.ACCOUNT_SERVICE_ID;
@@ -22,7 +23,7 @@ public class AccountServiceProxy {
         call.setPortId(port.getPortId());
         call.setServiceId(serciceId);
         call.setMethodKey(ServiceConstant.ACCOUNTSERVICE_VERIFY);
-        call.setField(service.parseField(name, age,context));
+        call.setField(new Param(name, age,context).build());
         service.addQueue(call);
     }
 }

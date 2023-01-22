@@ -1,8 +1,7 @@
 package com.game.core;
 
-import com.alibaba.fastjson.JSON;
+import com.game.core.call.WSCall;
 import com.game.core.config.ServerConfig;
-import com.game.core.util.Log;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -14,7 +13,7 @@ public class Node extends Thread {
     private ConcurrentMap<Integer, Port> ports;
 
     // ws -> node
-    private LinkedBlockingQueue<Call> queue;
+    private LinkedBlockingQueue<WSCall> queue;
 
 
     public Node(int nodeId) {
@@ -40,27 +39,24 @@ public class Node extends Thread {
         while (true) {
             try{
                 // 投入port队列
-                Call call = queue.take();
-                nodeMessageHandler(call);
+                WSCall WSCall = queue.take();
+                nodeMessageHandler(WSCall);
             }catch (Exception e){
                 e.printStackTrace();
             }
         }
     }
 
-    public void nodeMessageHandler(Call call) {
-        Log.info("node call = ", call);
+    public void nodeMessageHandler(WSCall WSCall) {
         // 解码，分派port
-
-        if(ServerConfig.NODE_ID != call.getFromNodeId()){
+        if(ServerConfig.NODE_ID != WSCall.getFromNodeId()){
             // 发到rpc队列
             return;
         }
         // 投入port queue
-        Integer toPortId = call.getToPortId();
+        Integer toPortId = WSCall.getToPortId();
         Port port = Node.instance().ports.get(toPortId);
-        call.setQueueType(2);
-        port.addQueue(call);
+        port.addQueue(WSCall);
     }
 
 
@@ -72,8 +68,8 @@ public class Node extends Thread {
         return ports.get(portId);
     }
 
-    public void addQueue(Call call) {
-        this.queue.add(call);
+    public void addQueue(WSCall WSCall) {
+        this.queue.add(WSCall);
     }
 
 }

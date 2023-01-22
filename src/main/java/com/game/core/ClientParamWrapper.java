@@ -2,6 +2,7 @@ package com.game.core;
 
 /**
  * 客户端消息上行参数
+ * {"msgHandlerId":"AccountMsgHandler.verify","jsonParam":{"name":"zhangsan","age":18}}
  */
 public class ClientParamWrapper {
     /**

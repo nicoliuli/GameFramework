@@ -5,6 +5,8 @@ public class HumanObject {
     private Integer humanId;
     private Connection connection;
 
+    // 还可以继续封装其他数据
+
     public Integer getHumanId() {
         return humanId;
     }

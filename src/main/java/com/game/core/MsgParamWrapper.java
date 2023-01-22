@@ -3,7 +3,7 @@ package com.game.core;
 import com.game.core.func.Func1;
 
 /**
- *
+ *  msgHandler的注册信息
  */
 public class MsgParamWrapper {
     /**
@@ -11,7 +11,7 @@ public class MsgParamWrapper {
      */
    private Func1<MsgParam> func1;
     /**
-     * 参数转化为class的类型
+     * 请求参数转化为class的类型
      */
    private Class clazz;
 

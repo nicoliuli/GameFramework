@@ -1,6 +1,6 @@
-package com.game.core;
+package com.game.core.call;
 
-public class Call {
+public class WSCall {
 
     private Integer fromNodeId;
     private Integer fromPortId;
@@ -9,14 +9,6 @@ public class Call {
     private Integer toPortId;
 
     private Integer portId;
-
-    /**
-     * ws->node 1
-     * node->port   2
-     * port->service    3
-     *
-     */
-    private Integer queueType;
 
     // msgHandlerId
     private String msgHandlerId;
@@ -62,13 +54,6 @@ public class Call {
         this.toPortId = toPortId;
     }
 
-    public Integer getQueueType() {
-        return queueType;
-    }
-
-    public void setQueueType(Integer queueType) {
-        this.queueType = queueType;
-    }
 
     public String getJsonParam() {
         return jsonParam;

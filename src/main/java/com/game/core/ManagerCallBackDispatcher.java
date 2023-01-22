@@ -8,6 +8,7 @@ import com.game.core.util.Param;
 import java.util.concurrent.LinkedBlockingQueue;
 
 /**
+ * mmanager的回调分发器
  * 单实例
  */
 public class ManagerCallBackDispatcher extends Thread {

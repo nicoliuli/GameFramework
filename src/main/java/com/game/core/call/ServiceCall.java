@@ -1,8 +1,12 @@
 package com.game.core.call;
 
+import com.game.core.util.Param;
+
 public class ServiceCall implements SCall{
 
-    public Integer type = 1;
+    // service
+    public final Integer type = 1;
+
     private Integer portId;
 
     private String serviceId;
@@ -16,11 +20,11 @@ public class ServiceCall implements SCall{
     /**
      * 字段
      */
-    private Object[] field;
+    private Param field;
 
     @Override
     public Integer getType() {
-        return 1;
+        return this.type;
     }
 
     public void setPortId(Integer portId) {
@@ -36,7 +40,7 @@ public class ServiceCall implements SCall{
         this.methodKey = methodKey;
     }
 
-    public void setField(Object[] field) {
+    public void setField(Param field) {
         this.field = field;
     }
 
@@ -44,7 +48,7 @@ public class ServiceCall implements SCall{
         return methodKey;
     }
 
-    public Object[] getField() {
+    public Param getField() {
         return field;
     }
 }

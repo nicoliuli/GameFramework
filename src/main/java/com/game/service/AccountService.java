@@ -1,6 +1,5 @@
 package com.game.service;
 
-import com.game.core.HumanObject;
 import com.game.core.Port;
 import com.game.core.Service;
 import com.game.core.anno.CallBack;
@@ -12,21 +11,11 @@ import com.game.core.func.Func3;
 import com.game.core.util.Param;
 import com.game.service.proxy.EquipServiceProxy;
 
-import java.util.HashMap;
-import java.util.concurrent.LinkedBlockingQueue;
-
 public class AccountService extends Service {
 
 
     public AccountService(Port port) {
         super(ServiceConstant.ACCOUNT_SERVICE_ID, port);
-        /*this.serviceId = ServiceConstant.ACCOUNT_SERVICE_ID;
-        this.port = port;
-        this.methodMapping  = new HashMap<>();
-        this.callbackMethodMapping = new HashMap<>();
-        queue = new LinkedBlockingQueue();
-       this.port.services.put(getServiceId(),this);
-        regMethod();*/
     }
 
     @Serv

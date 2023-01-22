@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * manager的方法映射
  * 单实例
  */
 public class MsgHandlerMapping {

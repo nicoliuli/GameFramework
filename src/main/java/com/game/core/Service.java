@@ -25,19 +25,17 @@ public abstract class Service extends Thread {
 
     public Map<String, Object> callbackMethodMapping;
 
-    // port -> service
+    // port -> service 和 service -> service callback
     public LinkedBlockingQueue<SCall> queue;
 
 
-
-
-    public Service(String serviceId,Port port){
+    public Service(String serviceId, Port port) {
         this.serviceId = serviceId;
         this.port = port;
-        this.methodMapping  = new HashMap<>();
+        this.methodMapping = new HashMap<>();
         this.callbackMethodMapping = new HashMap<>();
         queue = new LinkedBlockingQueue<>();
-        this.port.services.put(getServiceId(),this);
+        this.port.services.put(getServiceId(), this);
         regMethod();
     }
 
@@ -50,16 +48,16 @@ public abstract class Service extends Thread {
 
     private void loop() {
         while (true) {
-            try{
+            try {
                 SCall call = queue.take();
                 Integer type = call.getType();
-                if(type == 1){
+                if (type == 1) {
                     processService((ServiceCall) call);
-                }else {
+                } else {
                     processServiceCallBack((ServiceCallback) call);
                 }
 
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
@@ -68,7 +66,7 @@ public abstract class Service extends Thread {
     // service队列
     private void processService(ServiceCall call) {
         String methodKey = call.getMethodKey();
-        Object[] field = call.getField();
+        Object[] field = call.getField().getParam();
         int size = field == null ? 0 : field.length;
         Object obj = methodMapping.get(methodKey);
 
@@ -91,10 +89,10 @@ public abstract class Service extends Thread {
     private void processServiceCallBack(ServiceCallback call) {
         String methodKey = call.getMethodKey();
 
-        Func2 func2 = (Func2)callbackMethodMapping.get(methodKey);
+        Func2 func2 = (Func2) callbackMethodMapping.get(methodKey);
         Object result = call.getResult();
         Param context = call.getContext();
-        func2.apply(result,context);
+        func2.apply(result, context);
 
     }
 
@@ -110,7 +108,7 @@ public abstract class Service extends Thread {
         queue.add(call);
     }
 
-    public Object [] parseField(Object ... params){
+    public Object[] parseField(Object... params) {
         return params;
     }
 }

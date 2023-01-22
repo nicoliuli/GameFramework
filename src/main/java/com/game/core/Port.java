@@ -1,9 +1,9 @@
 package com.game.core;
 
+import com.game.core.call.WSCall;
 import com.game.core.call.MsgCall;
 import com.game.core.call.ServiceCallback;
 import com.game.core.util.Log;
-import com.game.core.util.Param;
 import com.game.service.AccountService;
 import com.game.service.EquipService;
 
@@ -21,7 +21,7 @@ public class Port extends Thread {
     private static ManagerCallBackDispatcher managerCallBackDispatcher;
 
     // node -> port
-    private LinkedBlockingQueue<Call> queue;
+    private LinkedBlockingQueue<WSCall> queue;
 
 
     private ConcurrentMap<Integer, Connection> conns;
@@ -71,16 +71,16 @@ public class Port extends Thread {
         while (true) {
             try {
                 // 找到对应的MsgHandler
-                Call call = queue.take();
-                portMessageHandler(call);
+                WSCall WSCall = queue.take();
+                portMessageHandler(WSCall);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
     }
 
-    public void portMessageHandler(Call call) {
-        Integer humanId = call.getHumanId();
+    public void portMessageHandler(WSCall WSCall) {
+        Integer humanId = WSCall.getHumanId();
         Connection connection = conns.get(humanId);
         // 封装humanObj
         HumanObject humanObj = new HumanObject();
@@ -88,14 +88,14 @@ public class Port extends Thread {
         humanObj.setConnection(connection);
 
         MsgCall msgCall = new MsgCall();
-        msgCall.setCall(call);
+        msgCall.setWSCall(WSCall);
         msgCall.setHumanObj(humanObj);
         // 投递function队列
         msgDispatcher.addQueue(msgCall);
     }
 
-    public void addQueue(Call call) {
-        this.queue.add(call);
+    public void addQueue(WSCall WSCall) {
+        this.queue.add(WSCall);
     }
 
 

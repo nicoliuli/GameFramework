@@ -12,17 +12,18 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * manager的回调方法映射
  * 单实例
  */
 public class ManagerCallbackMapping {
 
     private static ManagerCallbackMapping instance = new ManagerCallbackMapping();
 
-    private ManagerCallbackMapping(){
+    private ManagerCallbackMapping() {
 
     }
 
-    public static ManagerCallbackMapping instance(){
+    public static ManagerCallbackMapping instance() {
         return instance;
     }
 
@@ -32,10 +33,10 @@ public class ManagerCallbackMapping {
         //======== 注册manage callback
         AccountManager accountManager = AccountManager.inst();
         Func2<Object, Param> verify_result = accountManager::_verify_result;
-        managerCallbackMap.put(ManagerConstant.ACCOUNTMANAGER_RESULT_VERIFY,verify_result);
+        managerCallbackMap.put(ManagerConstant.ACCOUNTMANAGER_RESULT_VERIFY, verify_result);
     }
 
-    public Object getCallbackFunc(String methodKey){
+    public Object getCallbackFunc(String methodKey) {
         return managerCallbackMap.get(methodKey);
     }
 

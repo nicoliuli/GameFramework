@@ -1,19 +1,21 @@
 package com.game.core.call;
 
-import com.game.core.Call;
 import com.game.core.HumanObject;
 
+/**
+ * port -> msgHandler
+ */
 public class MsgCall {
-    private Call call;
+    private WSCall WSCall;
     private HumanObject humanObj;
 
 
-    public Call getCall() {
-        return call;
+    public WSCall getWSCall() {
+        return WSCall;
     }
 
-    public void setCall(Call call) {
-        this.call = call;
+    public void setWSCall(WSCall WSCall) {
+        this.WSCall = WSCall;
     }
 
     public HumanObject getHumanObj() {
