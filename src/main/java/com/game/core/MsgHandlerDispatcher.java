@@ -24,7 +24,7 @@ public class MsgHandlerDispatcher extends Thread {
 
     private MsgHandlerDispatcher() {
         this.queue = new LinkedBlockingQueue<>();
-        handlerMapping = new MsgHandlerMapping();
+        handlerMapping =  MsgHandlerMapping.instance();
     }
 
     public static MsgHandlerDispatcher instance(){

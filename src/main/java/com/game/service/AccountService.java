@@ -2,10 +2,13 @@ package com.game.service;
 
 import com.game.core.Port;
 import com.game.core.Service;
+import com.game.core.anno.CallBack;
 import com.game.core.anno.Serv;
+import com.game.core.call.ServiceCallback;
 import com.game.core.constant.ServiceConstant;
 import com.game.core.func.Func2;
 import com.game.core.func.Func3;
+import com.game.core.util.Param;
 
 import java.util.HashMap;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -17,14 +20,21 @@ public class AccountService extends Service {
         this.serviceId = ServiceConstant.ACCOUNT_SERVICE_ID;
         this.port = port;
         methodMapping  = new HashMap<>();
+        callbackMethodMapping = new HashMap<>();
         queue = new LinkedBlockingQueue();
         port.services.put(getServiceId(),this);
         regMethod();
     }
 
     @Serv
-    public void verify(String name, Integer age) {
+    public void verify(String name, Integer age,ServiceCallback context) {
         System.out.println("service call name = "+name+",age = "+age+",thread = " + Thread.currentThread().getId());
+
+        if(context != null){
+            // 投入回调队列
+            context.setResult("result = 1");
+            port.ret(context);
+        }
     }
 
     @Serv
@@ -32,12 +42,24 @@ public class AccountService extends Service {
 
     }
 
+    @CallBack
+    public void _result_verify(Object result,Param context){
+
+    }
+
     @Override
     public void regMethod() {
-        Func2<String, Integer> verify = this::verify;
+        // 注册service方法
+        Func3<String, Integer,ServiceCallback> verify = this::verify;
         methodMapping.put(ServiceConstant.ACCOUNTSERVICE_VERIFY, verify);
         Func3<Integer, Integer, String> equip = this::equip;
         methodMapping.put(ServiceConstant.ACCOUNTSERVICE_EQUIP, equip);
+
+
+
+        // 注册回调方法
+        Func2<Object, Param> result_verify = this::_result_verify;
+        callbackMethodMapping.put(ServiceConstant.ACCOUNTSERVICE_RESULT_VERIFY,result_verify);
     }
 
     @Override

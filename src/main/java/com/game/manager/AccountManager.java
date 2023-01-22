@@ -2,7 +2,11 @@ package com.game.manager;
 
 import com.game.core.Connection;
 import com.game.core.HumanObject;
+import com.game.core.anno.CallBack;
+import com.game.core.call.ServiceCallback;
+import com.game.core.constant.ManagerConstant;
 import com.game.core.dto.User;
+import com.game.core.util.Param;
 import com.game.service.proxy.AccountServiceProxy;
 
 public class AccountManager extends ManagerBase{
@@ -16,14 +20,19 @@ public class AccountManager extends ManagerBase{
         Connection conn = humanObj.getConnection();
         int portId = conn.getPort().getPortId();
         AccountServiceProxy prx = new AccountServiceProxy(conn.getPort());
-        prx.verify(user.getName(), user.getAge());
+        ServiceCallback context = new ServiceCallback(portId,1,ManagerConstant.ACCOUNTMANAGER_RESULT_VERIFY,new Param(humanObj).build());
+        prx.verify(user.getName(), user.getAge(),context);
 
         String result = "verify return portId = " + portId + ", humanId = " + humanId + ",param = " + user;
         humanObj.sendMsg(result);
     }
 
-    public void _verify_result(Object result,Object ... context) {
-
+    @CallBack
+    public void _verify_result(Object result,Param  context) {
+        System.out.println(result);
+        Object[] ctx = context.getParam();
+        HumanObject humanObj = (HumanObject) ctx[0];
+        humanObj.sendMsg("收到回调 humanId = " + humanObj.getHumanId() + ", result = " + (String)result);
     }
 
 

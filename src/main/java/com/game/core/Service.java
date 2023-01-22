@@ -1,6 +1,7 @@
 package com.game.core;
 
 import com.game.core.call.ServiceCall;
+import com.game.core.call.ServiceCallback;
 import com.game.core.func.Func0;
 import com.game.core.func.Func1;
 import com.game.core.func.Func2;
@@ -18,8 +19,13 @@ public abstract class Service extends Thread {
     // service方法映射
     public Map<String, Object> methodMapping;
 
+    public Map<String, Object> callbackMethodMapping;
+
     // port -> service
     public LinkedBlockingQueue<ServiceCall> queue;
+
+    // service的回调队列,消费后直接调用对应service的callback
+    public LinkedBlockingQueue<ServiceCallback> callBackQueue;
 
 
     @Override
@@ -67,6 +73,10 @@ public abstract class Service extends Thread {
 
     public void addQueue(ServiceCall call) {
         queue.add(call);
+    }
+
+    public void addCallBackQueue(ServiceCallback call) {
+        callBackQueue.add(call);
     }
 
     public Object [] parseField(Object ... params){

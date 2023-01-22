@@ -1,7 +1,9 @@
 package com.game.core;
 
 import com.game.core.call.MsgCall;
+import com.game.core.call.ServiceCallback;
 import com.game.core.util.Log;
+import com.game.core.util.Param;
 import com.game.service.AccountService;
 import com.game.service.EquipService;
 
@@ -16,24 +18,30 @@ public class Port extends Thread {
     private Node node;
     public Map<String, Service> services;
     private static MsgHandlerDispatcher msgDispatcher;
+    private static ManagerCallBackDispatcher managerCallBackDispatcher;
 
     // node -> port
     private LinkedBlockingQueue<Call> queue;
+
 
     private ConcurrentMap<Integer, Connection> conns;
 
     public Port(int portId) {
         this.portId = portId;
         this.queue = new LinkedBlockingQueue();
+
         this.services = new HashMap();
         this.conns = new ConcurrentHashMap();
         this.msgDispatcher = MsgHandlerDispatcher.instance();
-
+        this.managerCallBackDispatcher = ManagerCallBackDispatcher.instance();
     }
 
     private void regAndStartService() {
+        // 注册service方法
         AccountService accountService = new AccountService(this);
         EquipService equipService = new EquipService(this);
+
+        // 注册service回调
 
         for (Map.Entry<String, Service> entry : services.entrySet()) {
             entry.getValue().start();
@@ -50,6 +58,10 @@ public class Port extends Thread {
         if (!msgDispatcher.start) {
             msgDispatcher.start = true;
             msgDispatcher.start();
+        }
+        if(!managerCallBackDispatcher.start){
+            managerCallBackDispatcher.start = true;
+            managerCallBackDispatcher.start();
         }
 
         loop();
@@ -86,6 +98,7 @@ public class Port extends Thread {
         this.queue.add(call);
     }
 
+
     public void addConn(Connection conn) {
         this.conns.putIfAbsent(conn.getHumanId(), conn);
     }
@@ -96,5 +109,18 @@ public class Port extends Thread {
 
     public int getPortId() {
         return portId;
+    }
+
+    public void ret(ServiceCallback ret) {
+        Integer callbackType = ret.getCallbackType();
+        if (callbackType == 1) {
+            // 投入manager回调队列
+            managerCallBackDispatcher.addCallBackQueue(ret);
+        } else {
+            // 投入service回调队列
+            String serviceId = ret.getServiceId();
+            Service service = services.get(serviceId);
+            service.addCallBackQueue(ret);
+        }
     }
 }

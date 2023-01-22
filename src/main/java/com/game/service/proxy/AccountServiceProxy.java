@@ -3,6 +3,7 @@ package com.game.service.proxy;
 import com.game.core.Port;
 import com.game.core.Service;
 import com.game.core.call.ServiceCall;
+import com.game.core.call.ServiceCallback;
 import com.game.core.constant.ServiceConstant;
 
 public class AccountServiceProxy {
@@ -15,13 +16,13 @@ public class AccountServiceProxy {
     // 从port里取service
     private Port port;
 
-    public void verify(String name, Integer age) {
+    public void verify(String name, Integer age, ServiceCallback context) {
         Service service = port.services.get(serciceId);
         ServiceCall call = new ServiceCall();
         call.setPortId(port.getPortId());
         call.setServiceId(serciceId);
         call.setMethodKey(ServiceConstant.ACCOUNTSERVICE_VERIFY);
-        call.setField(service.parseField(name, age));
+        call.setField(service.parseField(name, age,context));
         service.addQueue(call);
     }
 }

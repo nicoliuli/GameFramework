@@ -10,4 +10,9 @@ public class ServiceConstant {
     public static final String ACCOUNTSERVICE_VERIFY = "AccountService.verify";
     public static final String ACCOUNTSERVICE_EQUIP = "AccountService.equip";
 
+
+    //==========callBackMethodKey===========//
+    public static final String ACCOUNTSERVICE_RESULT_VERIFY = "AccountService._result_verify";
+    public static final String ACCOUNTSERVICE_RESULT_EQUIP = "AccountService._result_equip";
+
 }
