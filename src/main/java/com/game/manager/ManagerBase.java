@@ -3,7 +3,7 @@ package com.game.manager;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class ManagerBase {
+abstract public class ManagerBase {
     public static volatile Map<Class, ManagerBase> instances = new ConcurrentHashMap<>();
     static {
         init();

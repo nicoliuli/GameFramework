@@ -14,24 +14,24 @@ import java.util.concurrent.LinkedBlockingQueue;
 public class Port extends Thread {
     private int portId;
     private Node node;
-    public Map<String,Service> services;
-    private MsgHandlerDispatcher msgDispatcher;
+    public Map<String, Service> services;
+    private static MsgHandlerDispatcher msgDispatcher;
 
     // node -> port
     private LinkedBlockingQueue<Call> queue;
 
-    private ConcurrentMap<Integer,Connection> conns;
+    private ConcurrentMap<Integer, Connection> conns;
 
     public Port(int portId) {
         this.portId = portId;
         this.queue = new LinkedBlockingQueue();
         this.services = new HashMap();
         this.conns = new ConcurrentHashMap();
-        this.msgDispatcher = new MsgHandlerDispatcher();
+        this.msgDispatcher = MsgHandlerDispatcher.instance();
 
     }
 
-    private void regAndStartService(){
+    private void regAndStartService() {
         AccountService accountService = new AccountService(this);
         EquipService equipService = new EquipService(this);
 
@@ -47,20 +47,24 @@ public class Port extends Thread {
         regAndStartService();
 
         // 启动MsgHandlerDispatcher
-        msgDispatcher.start();
+        if (!msgDispatcher.start) {
+            msgDispatcher.start = true;
+            msgDispatcher.start();
+        }
+
         loop();
     }
 
-    public void loop()  {
+    public void loop() {
         while (true) {
             try {
                 // 找到对应的MsgHandler
                 Call call = queue.take();
                 portMessageHandler(call);
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
-       }
+        }
     }
 
     public void portMessageHandler(Call call) {

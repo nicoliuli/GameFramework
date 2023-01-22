@@ -7,14 +7,28 @@ import com.game.core.func.Func1;
 
 import java.util.concurrent.LinkedBlockingQueue;
 
+/**
+ * 单实例
+ */
 public class MsgHandlerDispatcher extends Thread {
+
+    private static final MsgHandlerDispatcher instance = new MsgHandlerDispatcher();
     private LinkedBlockingQueue<MsgCall> queue;
 
     private MsgHandlerMapping handlerMapping;
 
-    public MsgHandlerDispatcher() {
+    /**
+     * 线程状态
+     */
+    public volatile boolean start = false;
+
+    private MsgHandlerDispatcher() {
         this.queue = new LinkedBlockingQueue<>();
         handlerMapping = new MsgHandlerMapping();
+    }
+
+    public static MsgHandlerDispatcher instance(){
+        return instance;
     }
 
 

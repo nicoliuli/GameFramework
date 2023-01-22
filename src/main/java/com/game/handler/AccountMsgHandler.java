@@ -5,7 +5,11 @@ import com.game.core.MsgParam;
 import com.game.core.dto.User;
 import com.game.manager.AccountManager;
 
-public class AccountMsgHandler {
+public class AccountMsgHandler extends MsgHandler {
+
+    public static AccountMsgHandler inst(){
+        return inst(AccountMsgHandler.class);
+    }
 
     public void login(MsgParam msgParam){
         System.out.println(msgParam.getParam());
