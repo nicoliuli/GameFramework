@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * manager的方法映射
+ * msgHandler的方法映射
  * 单实例
  */
 public class MsgHandlerMapping {
@@ -27,12 +27,11 @@ public class MsgHandlerMapping {
      */
     private Map<String, MsgParamWrapper> msgHandlerMap = new HashMap();
 
-    public void reg() {
+    public void regMsgHandler() {
         //======= 注册MsgHandler
         AccountMsgHandler accountMsgHandler = AccountMsgHandler.inst();
         msgHandlerMap.put(MsgHandlerConstant.ACCOUNTMSGHANDLER_LOGIN, new MsgParamWrapper(accountMsgHandler::login, Object.class));
         msgHandlerMap.put(MsgHandlerConstant.ACCOUNTMSGHANDLER_VERIFY, new MsgParamWrapper(accountMsgHandler::verify, User.class));
-
     }
 
     public MsgParamWrapper getMsgParamWrapper(String msgHandlerId) {

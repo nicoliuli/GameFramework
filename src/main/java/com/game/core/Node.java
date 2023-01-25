@@ -47,7 +47,7 @@ public class Node extends Thread {
         }
     }
 
-    public void nodeMessageHandler(WSCall WSCall) {
+    private void nodeMessageHandler(WSCall WSCall) {
         // 解码，分派port
         if(ServerConfig.NODE_ID != WSCall.getFromNodeId()){
             // 发到rpc队列

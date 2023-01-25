@@ -8,7 +8,7 @@ import com.game.core.util.Param;
 import java.util.concurrent.LinkedBlockingQueue;
 
 /**
- * mmanager的回调分发器
+ * manager的回调分发器
  * 单实例
  */
 public class ManagerCallBackDispatcher extends Thread {
@@ -16,8 +16,7 @@ public class ManagerCallBackDispatcher extends Thread {
     private static final ManagerCallBackDispatcher instance = new ManagerCallBackDispatcher();
     // service的回调队列,消费后直接调用manager的callback
     private LinkedBlockingQueue<ServiceCallback> callbackQueue;
-    // manager回调方法映射
-    private ManagerCallbackMapping callbackMapping;
+
 
     /**
      * 线程状态
@@ -26,7 +25,6 @@ public class ManagerCallBackDispatcher extends Thread {
 
     private ManagerCallBackDispatcher() {
         this.callbackQueue = new LinkedBlockingQueue<>();
-        callbackMapping = ManagerCallbackMapping.instance();
     }
 
     public static ManagerCallBackDispatcher instance() {
@@ -36,7 +34,6 @@ public class ManagerCallBackDispatcher extends Thread {
 
     @Override
     public void run() {
-        callbackMapping.reg();
         loop();
     }
 

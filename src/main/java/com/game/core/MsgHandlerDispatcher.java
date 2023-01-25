@@ -36,7 +36,7 @@ public class MsgHandlerDispatcher extends Thread {
 
     @Override
     public void run() {
-        handlerMapping.reg();
+        handlerMapping.regMsgHandler();
         loop();
     }
 

@@ -25,7 +25,7 @@ public class AccountService extends Service {
         EquipServiceProxy prx = new EquipServiceProxy(port);
         ServiceCallback ctx =
                 new ServiceCallback(port.getPortId(), serviceId, 2,
-                        (Func2<Object, Param>) this::_result_verify, new Param(context).build());
+                        (Func2<Object, Param>) this::_result_verify, new Param(context));
         prx.wear(name, age, ctx);
 
         /*if (context != null) {
@@ -59,11 +59,6 @@ public class AccountService extends Service {
         methodMapping.put(ServiceConstant.ACCOUNTSERVICE_VERIFY, verify);
         Func3<Integer, Integer, String> equip = this::equip;
         methodMapping.put(ServiceConstant.ACCOUNTSERVICE_EQUIP, equip);
-
-
-        // 注册回调方法
-        Func2<Object, Param> result_verify = this::_result_verify;
-        callbackMethodMapping.put(ServiceConstant.ACCOUNTSERVICE_RESULT_VERIFY, result_verify);
     }
 
     @Override

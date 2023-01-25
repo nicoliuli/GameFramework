@@ -4,10 +4,7 @@ import com.game.core.call.SCall;
 import com.game.core.call.ServiceCall;
 import com.game.core.call.ServiceCallback;
 import com.game.core.constant.ServiceConstant;
-import com.game.core.func.Func0;
-import com.game.core.func.Func1;
-import com.game.core.func.Func2;
-import com.game.core.func.Func3;
+import com.game.core.func.*;
 import com.game.core.util.Log;
 import com.game.core.util.Param;
 
@@ -71,17 +68,15 @@ public abstract class Service extends Thread {
         Object obj = methodMapping.get(methodKey);
 
         if (size == 0) {
-            Func0 func0 = (Func0) obj;
-            func0.apply();
+            ((Func0) obj).apply();
         } else if (size == 1) {
-            Func1 func1 = (Func1) obj;
-            func1.apply(field[0]);
+            ((Func1) obj).apply(field[0]);
         } else if (size == 2) {
-            Func2 func2 = (Func2) obj;
-            func2.apply(field[0], field[1]);
+            ((Func2) obj).apply(field[0], field[1]);
         } else if (size == 3) {
-            Func3 func3 = (Func3) obj;
-            func3.apply(field[0], field[1], field[2]);
+            ((Func3) obj).apply(field[0], field[1], field[2]);
+        } else if (size == 4) {
+            ((Func4) obj).apply(field[0], field[1], field[2], field[3]);
         }
     }
 
@@ -89,7 +84,7 @@ public abstract class Service extends Thread {
     private void processServiceCallBack(ServiceCallback call) {
         Object result = call.getResult();
         Param context = call.getContext();
-        call.getCallbackFunc().apply(result,context);
+        call.getCallbackFunc().apply(result, context);
     }
 
     abstract public void regMethod();

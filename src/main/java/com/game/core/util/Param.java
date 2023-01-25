@@ -4,12 +4,8 @@ public class Param {
 
     private Object[] param;
 
-    public Param(Object... objs){
+    public Param(Object... objs) {
         this.param = objs;
-    }
-
-    public Param build() {
-        return this;
     }
 
     public Object[] getParam() {
