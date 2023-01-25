@@ -7,15 +7,14 @@ import com.game.core.call.ServiceCallback;
 import com.game.core.constant.ServiceConstant;
 import com.game.core.util.Param;
 
-public class AccountServiceProxy {
+public class AccountServiceProxy extends Proxy{
     private String serciceId = ServiceConstant.ACCOUNT_SERVICE_ID;
 
     public AccountServiceProxy(Port port) {
-        this.port = port;
+       super(port);
     }
 
-    // 从port里取service
-    private Port port;
+
 
     public void verify(String name, Integer age, ServiceCallback context) {
         Service service = port.services.get(serciceId);

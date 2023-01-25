@@ -23,8 +23,10 @@ public class AccountService extends Service {
         System.out.println("service call name = " + name + ",age = " + age + ",thread = " + Thread.currentThread().getId());
 
         EquipServiceProxy prx = new EquipServiceProxy(port);
-        ServiceCallback ctx = new ServiceCallback(port.getPortId(),serviceId,2,ServiceConstant.ACCOUNTSERVICE_RESULT_VERIFY,new Param(context).build());
-        prx.wear(name,age,ctx);
+        ServiceCallback ctx =
+                new ServiceCallback(port.getPortId(), serviceId, 2,
+                        (Func2<Object, Param>) this::_result_verify, new Param(context).build());
+        prx.wear(name, age, ctx);
 
         /*if (context != null) {
             // 投入回调队列
@@ -40,7 +42,7 @@ public class AccountService extends Service {
 
     @CallBack
     public void _result_verify(Object result, Param context) {
-        System.out.println(result.toString());
+        System.out.println("_result_verify = " + result.toString() + "thread = " + Thread.currentThread().getId());
         Object[] param = context.getParam();
         ServiceCallback callback = (ServiceCallback) param[0];
         /*Object[] param1 = callback.getContext().getParam();

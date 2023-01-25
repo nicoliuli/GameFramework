@@ -1,5 +1,8 @@
 package com.game.core.call;
 
+/**
+ * ws到port
+ */
 public class WSCall {
 
     private Integer fromNodeId;

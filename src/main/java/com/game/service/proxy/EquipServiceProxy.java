@@ -7,11 +7,11 @@ import com.game.core.call.ServiceCallback;
 import com.game.core.constant.ServiceConstant;
 import com.game.core.util.Param;
 
-public class EquipServiceProxy {
+public class EquipServiceProxy extends Proxy{
     private String serciceId = ServiceConstant.EQUIP_SERVICE_ID;
 
     public EquipServiceProxy(Port port) {
-        this.port = port;
+        super(port);
     }
 
     // 从port里取service

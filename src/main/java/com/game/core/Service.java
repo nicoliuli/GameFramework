@@ -87,13 +87,9 @@ public abstract class Service extends Thread {
 
     // service 回调队列
     private void processServiceCallBack(ServiceCallback call) {
-        String methodKey = call.getMethodKey();
-
-        Func2 func2 = (Func2) callbackMethodMapping.get(methodKey);
         Object result = call.getResult();
         Param context = call.getContext();
-        func2.apply(result, context);
-
+        call.getCallbackFunc().apply(result,context);
     }
 
     abstract public void regMethod();
@@ -106,9 +102,5 @@ public abstract class Service extends Thread {
 
     public void addCallBackQueue(ServiceCallback call) {
         queue.add(call);
-    }
-
-    public Object[] parseField(Object... params) {
-        return params;
     }
 }

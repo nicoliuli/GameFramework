@@ -16,7 +16,7 @@ public class ManagerCallBackDispatcher extends Thread {
     private static final ManagerCallBackDispatcher instance = new ManagerCallBackDispatcher();
     // service的回调队列,消费后直接调用manager的callback
     private LinkedBlockingQueue<ServiceCallback> callbackQueue;
-
+    // manager回调方法映射
     private ManagerCallbackMapping callbackMapping;
 
     /**
@@ -53,11 +53,9 @@ public class ManagerCallBackDispatcher extends Thread {
     }
 
     public void callbackHandler(ServiceCallback callback) {
-        String methodKey = callback.getMethodKey();
         Object result = callback.getResult();
         Param context = callback.getContext();
-        Func2 func2 = (Func2) callbackMapping.getCallbackFunc(methodKey);
-        func2.apply(result,context);
+        callback.getCallbackFunc().apply(result,context);
     }
 
 

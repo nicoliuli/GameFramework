@@ -2,6 +2,7 @@ package com.game.core.call;
 
 import com.game.core.util.Param;
 
+// 调动service
 public class ServiceCall implements SCall{
 
     // service
