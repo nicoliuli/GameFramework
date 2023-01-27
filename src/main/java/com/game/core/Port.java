@@ -21,7 +21,7 @@ public class Port extends Thread {
     private static ManagerCallBackDispatcher managerCallBackDispatcher;
 
     // node -> port
-    private LinkedBlockingQueue<WSCall> queue;
+    private LinkedBlockingQueue<MsgCall> queue;
 
 
     private ConcurrentMap<Integer, Connection> conns;
@@ -71,31 +71,21 @@ public class Port extends Thread {
         while (true) {
             try {
                 // 找到对应的MsgHandler
-                WSCall WSCall = queue.take();
-                portMessageHandler(WSCall);
+                MsgCall msgCall = queue.take();
+                portMessageHandler(msgCall);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
     }
 
-    public void portMessageHandler(WSCall WSCall) {
-        Integer humanId = WSCall.getHumanId();
-        Connection connection = conns.get(humanId);
-        // 封装humanObj
-        HumanObject humanObj = new HumanObject();
-        humanObj.setHumanId(humanId);
-        humanObj.setConnection(connection);
-
-        MsgCall msgCall = new MsgCall();
-        msgCall.setWSCall(WSCall);
-        msgCall.setHumanObj(humanObj);
+    public void portMessageHandler(MsgCall msgCall) {
         // 投递function队列
         msgDispatcher.addQueue(msgCall);
     }
 
-    public void addQueue(WSCall WSCall) {
-        this.queue.add(WSCall);
+    public void addQueue(MsgCall msgCall) {
+        this.queue.add(msgCall);
     }
 
 
@@ -103,8 +93,8 @@ public class Port extends Thread {
         this.conns.putIfAbsent(conn.getHumanId(), conn);
     }
 
-    public void removeConn(Integer humanId) {
-        this.conns.remove(humanId);
+    public Connection removeConn(Integer humanId) {
+        return this.conns.remove(humanId);
     }
 
     public int getPortId() {

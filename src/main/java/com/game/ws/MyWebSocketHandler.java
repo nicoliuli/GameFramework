@@ -1,6 +1,8 @@
 package com.game.ws;
 
 import com.alibaba.fastjson.JSONObject;
+import com.game.core.HumanObject;
+import com.game.core.call.MsgCall;
 import com.game.core.call.WSCall;
 import com.game.core.Connection;
 import com.game.core.Node;
@@ -41,20 +43,29 @@ public class MyWebSocketHandler extends SimpleChannelInboundHandler<TextWebSocke
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, TextWebSocketFrame textWebSocketFrame) throws Exception {
-        WSCall WSCall = new WSCall();
-        WSCall.setFromNodeId(ServerConfig.NODE_ID);
-        WSCall.setFromPortId(portId);
-        WSCall.setToPortId(portId);
-        WSCall.setHumanId(humanId);
+        WSCall wsCall = new WSCall();
+        wsCall.setFromNodeId(ServerConfig.NODE_ID);
+        wsCall.setFromPortId(portId);
+        wsCall.setToPortId(portId);
+        wsCall.setHumanId(humanId);
         // 解析并设置 param function等
         String message = textWebSocketFrame.text();
         JSONObject jsonObject = JSONObject.parseObject(message);
         String msgHandlerId = jsonObject.getString("msgHandlerId");
         JSONObject jsonParam = jsonObject.getJSONObject("jsonParam");
-        WSCall.setMsgHandlerId(msgHandlerId);
-        WSCall.setJsonParam(jsonParam.toJSONString());
+        wsCall.setMsgHandlerId(msgHandlerId);
+        wsCall.setJsonParam(jsonParam.toJSONString());
+
+        // 封装humanObj,如果封装过重，可以把封装过程下沉到Node里，避免阻塞NioEventLoop
+        HumanObject humanObj = new HumanObject();
+        humanObj.setHumanId(humanId);
+        humanObj.setConnection(conn);
+        MsgCall msgCall = new MsgCall();
+        msgCall.setWSCall(wsCall);
+        msgCall.setHumanObj(humanObj);
+
         // 投入node队列
-        Node.instance().addQueue(WSCall);
+        Node.instance().addQueue(msgCall);
     }
 
     @Override
@@ -65,8 +76,8 @@ public class MyWebSocketHandler extends SimpleChannelInboundHandler<TextWebSocke
 
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
-        super.channelInactive(ctx);
         // 定时任务 移除数据
-        port.removeConn(humanId);
+        Connection connection = port.removeConn(humanId);
+        connection.getChannel().close();
     }
 }
