@@ -32,6 +32,7 @@ public class MsgHandlerMapping {
         AccountMsgHandler accountMsgHandler = AccountMsgHandler.inst();
         msgHandlerMap.put(MsgHandlerConstant.ACCOUNTMSGHANDLER_LOGIN, new MsgParamWrapper(accountMsgHandler::login, Object.class));
         msgHandlerMap.put(MsgHandlerConstant.ACCOUNTMSGHANDLER_VERIFY, new MsgParamWrapper(accountMsgHandler::verify, User.class));
+        msgHandlerMap.put(MsgHandlerConstant.ACCOUNTMSGHANDLER_EVENT, new MsgParamWrapper(accountMsgHandler::event, User.class));
     }
 
     public MsgParamWrapper getMsgParamWrapper(String msgHandlerId) {

@@ -23,4 +23,11 @@ public class AccountMsgHandler extends MsgHandler {
         User user = (User) msgParam.getParam();
         AccountManager.inst().verify(humanObject, user);
     }
+
+    @MsgController
+    public void event(MsgParam msgParam) {
+        HumanObject humanObject = msgParam.getHumanObject();
+        User user = (User) msgParam.getParam();
+        AccountManager.inst().event(humanObject, user);
+    }
 }
