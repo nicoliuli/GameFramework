@@ -1,8 +1,8 @@
 package com.game.core;
 
-import com.game.core.call.WSCall;
 import com.game.core.call.MsgCall;
 import com.game.core.call.ServiceCallback;
+import com.game.core.obj.Connection;
 import com.game.core.util.Log;
 import com.game.service.AccountService;
 import com.game.service.EquipService;
@@ -28,10 +28,10 @@ public class Port extends Thread {
 
     public Port(int portId) {
         this.portId = portId;
-        this.queue = new LinkedBlockingQueue();
+        this.queue = new LinkedBlockingQueue<>();
 
-        this.services = new HashMap();
-        this.conns = new ConcurrentHashMap();
+        this.services = new HashMap<>();
+        this.conns = new ConcurrentHashMap<>();
         this.msgDispatcher = MsgHandlerDispatcher.instance();
         this.managerCallBackDispatcher = ManagerCallBackDispatcher.instance();
     }
@@ -107,6 +107,7 @@ public class Port extends Thread {
             // 投入manager回调队列
             managerCallBackDispatcher.addCallBackQueue(ret);
         } else {
+            // TODO: 2023/2/8 如果存在跨port调用service，则需要根基portId找到port和service，并投入service回调队列
             // 投入service回调队列
             String serviceId = ret.getServiceId();
             Service service = services.get(serviceId);

@@ -1,4 +1,4 @@
-package com.game.core;
+package com.game.core.obj;
 
 /**
  * 客户端消息上行参数

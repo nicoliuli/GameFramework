@@ -1,14 +1,14 @@
 package com.game.manager;
 
-import com.game.core.Connection;
+import com.game.core.obj.Connection;
 import com.game.core.Event;
-import com.game.core.HumanObject;
+import com.game.core.obj.HumanObject;
 import com.game.core.Port;
 import com.game.core.anno.CallBack;
 import com.game.core.anno.Listener;
 import com.game.core.call.ServiceCallback;
 import com.game.core.constant.EventKey;
-import com.game.core.dto.User;
+import com.game.dto.User;
 import com.game.core.func.Func2;
 import com.game.core.util.Param;
 import com.game.service.proxy.AccountServiceProxy;

@@ -1,7 +1,8 @@
 package com.game.core;
 
 import com.game.core.constant.MsgHandlerConstant;
-import com.game.core.dto.User;
+import com.game.core.obj.MsgParamWrapper;
+import com.game.dto.User;
 import com.game.handler.AccountMsgHandler;
 
 import java.util.HashMap;

@@ -1,5 +1,6 @@
-package com.game.core;
+package com.game.core.obj;
 
+import com.game.core.Port;
 import io.netty.channel.Channel;
 
 public class Connection {

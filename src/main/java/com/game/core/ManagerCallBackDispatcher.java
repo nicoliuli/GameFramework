@@ -2,19 +2,18 @@ package com.game.core;
 
 
 import com.game.core.call.ServiceCallback;
-import com.game.core.func.Func2;
 import com.game.core.util.Param;
 
 import java.util.concurrent.LinkedBlockingQueue;
 
 /**
- * manager的回调分发器
+ * manager的回调分发器,manager掉service，service回调manager
  * 单实例
  */
 public class ManagerCallBackDispatcher extends Thread {
 
     private static final ManagerCallBackDispatcher instance = new ManagerCallBackDispatcher();
-    // service的回调队列,消费后直接调用manager的callback
+    // manager调用service的回调队列,消费后直接调用manager的callback
     private LinkedBlockingQueue<ServiceCallback> callbackQueue;
 
 

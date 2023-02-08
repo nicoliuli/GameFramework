@@ -1,6 +1,6 @@
 package com.game.core.call;
 
-import com.game.core.HumanObject;
+import com.game.core.obj.HumanObject;
 
 /**
  * port -> msgHandler

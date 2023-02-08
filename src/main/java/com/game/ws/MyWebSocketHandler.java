@@ -1,22 +1,19 @@
 package com.game.ws;
 
 import com.alibaba.fastjson.JSONObject;
-import com.game.core.HumanObject;
+import com.game.core.*;
 import com.game.core.call.MsgCall;
 import com.game.core.call.WSCall;
-import com.game.core.Connection;
-import com.game.core.Node;
-import com.game.core.Port;
 import com.game.core.config.ServerConfig;
+import com.game.core.obj.Connection;
+import com.game.core.obj.GlobalHumanObject;
+import com.game.core.obj.HumanObject;
 import com.game.core.util.HumanObjectUtil;
 import com.game.core.util.PortUtil;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
-import io.netty.channel.group.ChannelGroup;
-import io.netty.channel.group.DefaultChannelGroup;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
-import io.netty.util.concurrent.GlobalEventExecutor;
 
 
 public class MyWebSocketHandler extends SimpleChannelInboundHandler<TextWebSocketFrame> {
@@ -38,6 +35,8 @@ public class MyWebSocketHandler extends SimpleChannelInboundHandler<TextWebSocke
         humanId = HumanObjectUtil.genHumanId();
         conn = new Connection(humanId, channel, port);
 
+        GlobalHumanObject globalHumanObj = new GlobalHumanObject(humanId,ServerConfig.NODE_ID,portId,conn);
+        GlobalHumanObjectInfo.add(globalHumanObj);
         port.addConn(conn);
     }
 
@@ -77,6 +76,7 @@ public class MyWebSocketHandler extends SimpleChannelInboundHandler<TextWebSocke
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
         // 定时任务 移除数据
+        GlobalHumanObjectInfo.remove(humanId);
         Connection connection = port.removeConn(humanId);
         connection.getChannel().close();
     }

@@ -1,9 +1,9 @@
 package com.game.handler;
 
-import com.game.core.HumanObject;
-import com.game.core.MsgParam;
+import com.game.core.obj.HumanObject;
+import com.game.core.obj.MsgParam;
 import com.game.core.anno.MsgController;
-import com.game.core.dto.User;
+import com.game.dto.User;
 import com.game.manager.AccountManager;
 
 public class AccountMsgHandler extends MsgHandler {

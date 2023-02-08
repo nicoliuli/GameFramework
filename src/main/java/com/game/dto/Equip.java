@@ -1,4 +1,4 @@
-package com.game.core.dto;
+package com.game.dto;
 
 public class Equip {
     private Integer id;

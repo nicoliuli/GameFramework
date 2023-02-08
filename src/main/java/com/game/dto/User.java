@@ -1,4 +1,4 @@
-package com.game.core.dto;
+package com.game.dto;
 
 public class User {
     private String name;

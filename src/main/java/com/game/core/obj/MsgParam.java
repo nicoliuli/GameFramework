@@ -1,4 +1,4 @@
-package com.game.core;
+package com.game.core.obj;
 
 public class MsgParam {
     private HumanObject humanObject;

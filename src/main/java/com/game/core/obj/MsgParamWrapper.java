@@ -1,4 +1,4 @@
-package com.game.core;
+package com.game.core.obj;
 
 import com.game.core.func.Func1;
 

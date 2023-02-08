@@ -1,4 +1,4 @@
-package com.game.core;
+package com.game.core.obj;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 
 public class HumanObject {

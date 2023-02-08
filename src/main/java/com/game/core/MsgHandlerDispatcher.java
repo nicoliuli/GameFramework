@@ -5,11 +5,14 @@ import com.alibaba.fastjson.JSON;
 import com.game.core.call.WSCall;
 import com.game.core.call.MsgCall;
 import com.game.core.func.Func1;
+import com.game.core.obj.HumanObject;
+import com.game.core.obj.MsgParam;
+import com.game.core.obj.MsgParamWrapper;
 
 import java.util.concurrent.LinkedBlockingQueue;
 
 /**
- * manager的方法分发器
+ * msgHandler的方法分发器
  * 单实例
  */
 public class MsgHandlerDispatcher extends Thread {
